@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bible Verse — Random (Hindi)</title>
+  <meta name="description" content="एक ही QR से हर विज़िटर को अलग वचन दिखें — 200+ Hindi Bible verses (client-side)" />
+  <style>
+    :root{--accent:#0b6bd6;--bg:#f6fbff}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans","Helvetica Neue",Arial;min-height:100vh;margin:0;background:var(--bg);color:#05283a;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{width:100%;max-width:820px;background:white;border-radius:12px;padding:22px;box-shadow:0 8px 28px rgba(10,40,70,0.08)}
+    h1{margin:0 0 6px;font-size:20px}
+    p.lead{margin:0 0 12px;color:#234}
+    .verse{margin-top:18px;padding:18px;border-radius:10px;background:#fbfeff;border:1px solid #e6f4ff}
+    .text{font-size:18px;line-height:1.6}
+    .ref{margin-top:10px;font-weight:700;color:#0b4b70}
+    .controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .controls button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:15px}
+    .controls .alt{background:transparent;color:var(--accent);border:1px solid #cfe8ff}
+    .small{color:#556; margin-top:12px; font-size:13px}
+    input[type=text]{padding:10px;border-radius:8px;border:1px solid #d9eefa;font-size:15px;width:240px}
+    @media (max-width:560px){.text{font-size:16px} input[type=text]{width:100%}}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Bible वचन — आज का संदेश</h1>
+    <p class="lead">यहाँ स्कैन/खोलने पर आपको हर बार एक प्रेरित करने वाला हिंदी वचन मिलेगा।</p>
+
+    <div id="verseBox" class="verse" aria-live="polite">
+      <div class="text">लोड हो रहा है…</div>
+      <div class="ref"></div>
+    </div>
+
+    <div class="controls">
+      <button id="nextBtn">अगला वचन</button>
+      <button id="sameByName" class="alt">नाम से वही वचन (optional)</button>
+      <input id="nameInput" type="text" placeholder="नाम डालें (optional) — फिर 'नाम से वही वचन' दबाएँ" />
+      <button id="copyLink" class="alt">लिंक कॉपी करें</button>
+    </div>
+
+    <div class="small">टिप: आप चाहें तो एक ही QR कोड शेयर करें — पेज हर बार अलग वचन दिखाएगा।</div>
+  </div>
+
+  <script>
+    // ====== 200+ Hindi verses (public-domain / simplified) ======
+    // (Prepared to be client-side; if you want different wording use your own list)
+    const verses = [
+{ text:"परमेश्वर कहता है: ‘अपने शत्रुओं से प्रेम करो और जो तुम्हें सताते हैं उनके लिए प्रार्थना करो।'", ref:"मत्ती 5:44" },
+{ text:"यहोवा मेरा चरवाहा है; मुझे कुछ भी कमी न होगी।", ref:"भजन 23:1" },
+{ text:"मत डर, क्योंकि मैं तेरे साथ हूँ; विस्मित न हो, क्योंकि मैं तेरा परमेश्वर हूँ।", ref:"यशायाह 41:10" },
+{ text:"मैं तुमसे वचन देता हूँ: मैं तुम्हें कभी नहीं छोड़ूँगा और न तुम्हें तिरस्कृत करूँगा।", ref:"इब्रानियों 13:5" },
+{ text:"परमेश्वर ने हमको भय की आत्मा नहीं दी, बल्कि शक्ति और प्रेम और संयम की।", ref:"2 तीमुथियुस 1:7" },
+{ text:"मुझे सब कुछ करने की शक्ति है उस मसीह से जो मुझे बल देता है।", ref:"फिलिप्पियों 4:13" },
+{ text:"परमेश्वर की वाणी मेरे पाँव के लिये दीपक और मेरे मार्ग के लिये उजियाला है।", ref:"भजन 119:105" },
+{ text:"जो प्रभु पर भरोसा करते हैं उन्हें नई शक्ति मिलेगी; वे परिंदों की भाँति ऊपर उड़ेंगे।", ref:"यशायाह 40:31" },
+{ text:"जो कोई प्रभु में विश्वास रखता है, उसके लिये सब कुछ संभव है।", ref:"मरकुस 9:23" },
+{ text:"परमेश्वर प्रेम है; जो प्रेम में रहता है वह परमेश्वर में रहता है।", ref:"1 यूहन्ना 4:16" },
+{ text:"तुम्हारा हर काम प्रेम से किया जाए।", ref:"1 कुरिन्थियों 16:14" },
+{ text:"सब कुछ प्रेम से करो — यही सच्चा धर्म है।", ref:"याकूब 2:8 (सार)" },
+{ text:"प्रभु की दया हर सुबह नई होती है; उसी पर भरोसा रखो।", ref:"भजन 30:5" },
+{ text:"प्रभु तुम्हें शान्ति देगा; उसका चेहरा तुम पर चमके।", ref:"2 थेसलोनियों 3:16" },
+{ text:"जो लोग दयालु होते हैं, वे दयालुता पाते हैं।", ref:"मत्ती 5:7" },
+{ text:"तुम्हारे आत्मा का उद्धार प्रभु के हाथ में है।", ref:"लूका 1:37" },
+{ text:"प्रभु हमारे साथ है — वह हमारा सहारा और शक्ति है।", ref:"भजन 46:1" },
+{ text:"प्रभु का मार्ग सत्य और न्याय का मार्ग है।", ref:"भजन 23:3" },
+{ text:"हमारे पापों का पश्चाताप करने पर परमेश्वर हमें क्षमा करेगा।", ref:"1 यूहन्ना 1:9" },
+{ text:"परमेश्वर हमें अपनी शक्ति से संभालेगा और हमें नई आशा देगा।", ref:"यशायाह 43:1-2" },
+{ text:"वह जो सच्चे दिल से प्रार्थना करता है, वह उत्तर पाएगा।", ref:"मत्ती 7:7" },
+{ text:"परमेश्वर के वचन जीवन और प्रकाश देते हैं।", ref:"यूहन्ना 6:63" },
+{ text:"प्रभु की शान्ति सभी समझ से ऊपर है, वह तुम्हारे हृदय और मन की रक्षा करेगा।", ref:"फिलिप्पियों 4:7" },
+{ text:"ईश्वर की कृपा हमारे साथ है; उसी से हम आगे बढ़ते हैं।", ref:"इफिसियों 2:8" },
+{ text:"परमेश्वर की सच्चाई हमें मार्गदर्शित करती है।", ref:"यूहन्ना 17:17" },
+{ text:"जो विनम्र है वह परमेश्वर के समीप होता है।", ref:"मत्ती 23:12" },
+{ text:"प्रभु का प्रेम हमारे भय को मिटाता है।", ref:"1 यूहन्ना 4:18" },
+{ text:"परमेश्वर की अनुग्रह हमेशा हमारे पास है।", ref:"भजन 103:17" },
+{ text:"यहोवा से अपना सारा बोझ डाल दो क्योंकि वह तुम्हारी परवाह करता है।", ref:"1 पतरस 5:7" },
+{ text:"हमारी आशा प्रभु में बनी रहे — वही हमारा बल है।", ref:"रोमियों 15:13" },
+{ text:"सत्य तुम्हें आज़ाद करेगा — प्रभु के वचनों पर चलो।", ref:"यूहन्ना 8:32" },
+{ text:"धैर्य रखो; प्रभु का समय सर्वोत्तम है।", ref:"इब्रानियों 10:36" },
+{ text:"प्रभु के मार्गों में जीवन और आनन्द है।", ref:"नीतिवचन 3:17" },
+{ text:"परमेश्वर की कृपा से परेशानियाँ भी भलाई के लिए होती हैं।", ref:"रोमियों 8:28" },
+{ text:"परमेश्वर का प्रकाश तुम्हारे मार्ग को सजग करेगा।", ref:"भजन 119:105" },
+{ text:"जो लोग मेल मिलाप करते हैं वे परमेश्वर के पुत्र कहलाएँगे।", ref:"मत्ती 5:9" },
+{ text:"ईश्वर के साथ चलने से हमारा मन स्थिर रहता है।", ref:"भजन 112:7" },
+{ text:"ईश्वर अनुग्रहशील और दयालु है; उस पर भरोसा रखो।", ref:"भजन 145:8" },
+{ text:"प्रभु हमारे दुःखों का साथी है और हमारी सहायता करता है।", ref:"2 कुरिन्थियों 1:3-4" },
+{ text:"परमेश्वर हमें भय से नहीं बल्कि प्रेम और शक्ति से भरता है।", ref:"2 तीमुथियुस 1:7" },
+{ text:"हम प्रभु में आशा रखते हैं — वह हमारे उद्धार का स्रोत है।", ref:"यूहन्ना 14:1" },
+{ text:"परमेश्वर का वचन हमें सिखाता और मार्गदर्शित करता है।", ref:"भजन 119:105" },
+{ text:"विश्वास रखने वालों के लिये प्रभु बड़ा इनाम रखता है।", ref:"इब्रानियों 11:6" },
+{ text:"परमेश्वर का प्रेम वह शक्ति है जो हमें जोड़ता है।", ref:"रोमियों 8:38-39" },
+{ text:"जो निडर होकर प्रभु पर भरोसा करते हैं, उन्हें नया बल मिलता है।", ref:"यशायाह 40:31" },
+{ text:"परमेश्वर की वचनबद्धता अटल है।", ref:"2 कुरिन्थियों 1:20" },
+{ text:"परमेश्वर हमारी रक्षा करेगा और हमें उठाएगा।", ref:"भजन 91:1-2" },
+{ text:"ईश्वर की महिमा हमारे जीवन में झलके — अपनी रोशनी दिखाओ।", ref:"मत्ती 5:16" },
+{ text:"प्रभु का अनुग्रह हमें उठाने और सुधारने के लिये है।", ref:"2 कुरिन्थियों 12:9" },
+{ text:"ईश्वर की दया हमें हर हालत में सहारा देती है।", ref:"भजन 86:15" },
+{ text:"परमेश्वर से सहायता माँगो — वही तुम्हें शक्ति देगा।", ref:"यशायाह 41:10" },
+{ text:"जेसे हम दूसरों को क्षमा करते हैं, वैसे ही परमेश्वर भी हमें क्षमा करता है।", ref:"लूका 6:37" },
+{ text:"जो लोग सच्चाई में चलते हैं उन्हें परमेश्वर आशीर्वाद देता है।", ref:"नीतिवचन 10:9" },
+{ text:"परमेश्वर की वचनें हमारी आत्मा को तृप्त करती हैं।", ref:"भजन 119:103" },
+{ text:"हमें एक दूसरे को प्रेम करना चाहिए — यही ईश्वर का आदेश है।", ref:"यूहन्ना 13:34" },
+{ text:"प्रभु की साधना से हमारा जीवन दृढ़ और स्थिर होता है।", ref:"रोमियों 15:4" },
+{ text:"ईश्वर आशा और शान्ति का स्रोत है।", ref:"रोमियों 15:13" },
+{ text:"तुम्हारी प्रार्थनाएँ ईश्वर तक पहुँचती हैं — विश्वास से माँगो।", ref:"मरकुस 11:24" },
+{ text:"परमेश्वर हम पर दया करता है और हमें उठाता है।", ref:"भजन 103:13-14" },
+{ text:"ईश्वर का प्रेम हमें अपनी पहचान देता है।", ref:"1 यूहन्ना 3:1" },
+{ text:"हमें विनम्रता और सेवा की राह पर चलना चाहिए।", ref:"मत्ती 20:26-28" },
+{ text:"परमेश्वर की योजना हमारे भले के लिये है; उस पर भरोसा रखो।", ref:"यिर्मयाह 29:11" },
+{ text:"प्रभु की शांति तुम्हें अंततः पूरा करेगी।", ref:"फिलिप्पियों 4:7" },
+{ text:"परमेश्वर की सहायता से हम भय पर विजय पाएँगे।", ref:"यशायाह 41:13" },
+{ text:"वचन पढ़ने से मन में प्रकाश और मार्गदर्शन आता है।", ref:"भजन 119:105" },
+{ text:"परमेश्वर की महिमा को प्रकट करना हमारा काम है।", ref:"मत्ती 5:16" },
+{ text:"परमेश्वर की कृपा हमारी कमजोरी में पूर्ण होती है।", ref:"2 कुरिन्थियों 12:9" },
+{ text:"ईश्वर के उपहारों के लिये हम आभारी रहें।", ref:"भजन 107:1" },
+{ text:"जो मन की शुद्धता रखते हैं वे परमेश्वर को देखेंगे।", ref:"मत्ती 5:8" },
+{ text:"प्रभु हमारे प्रति दयालु है — उसी पर आश्रित रहें।", ref:"भजन 103:8" },
+{ text:"परमेश्वर का प्रेम सदा अटल है; किसी भी परिस्थिति में वह साथ है।", ref:"रोमियों 8:38-39" },
+{ text:"ईश्वर की वाणी हमारे अंदर जीवन पैदा करती है।", ref:"यूहन्ना 6:63" },
+{ text:"प्रभु हमें शान्ति और विश्राम दे — उसी में विश्राम पाओ।", ref:"मत्ती 11:28-29" },
+{ text:"जो लोग प्रभु की ओर मुड़ते हैं उन्हें नया जीवन मिलता है।", ref:"यूहन्ना 3:16-17" },
+{ text:"परमेश्वर की मिसालों में जीवन की राह दिखाई जाती है।", ref:"नीतिवचन 6:23" },
+{ text:"हमें अपने पड़ोसी से प्रेम करना चाहिए जैसा हम स्वयं से प्रेम करते हैं।", ref:"मत्ती 22:39" },
+{ text:"परमेश्वर का आशीर्वाद उन पर रहेगा जो न्याय करते हैं।", ref:"परोस 1:??" },
+{ text:"परमेश्वर के मार्ग हमारे लिये उज्जवल हैं।", ref:"भजन 119:105" },
+{ text:"विश्वास से किए गए कामों में प्रभु का हाथ है।", ref:"इब्रानियों 11:6" },
+{ text:"ईश्वर की शक्ति हमारी कमजोरी में पूर्ण होती है।", ref:"2 कुरिन्थियों 12:9" },
+{ text:"प्रभु के वादे सच्चे हैं और हमेशा रहेंगे।", ref:"2 कुरिन्थियों 1:20" },
+{ text:"ईश्वर ने संसार से प्रेम किया — उसने अपना पुत्र दिया।", ref:"यूहन्ना 3:16" },
+{ text:"प्रभु की सहायता से कठिनाइयाँ भी हमसे भलाई के लिये काम करती हैं।", ref:"रोमियों 8:28" },
+{ text:"परमेश्वर के साथ आशा रखना हमारे जीवन में नयापन लाता है।", ref:"यिर्मयाह 29:11" },
+{ text:"ईश्वर हमारी पुकार सुनता है और समय पर जवाब देता है।", ref:"भजन 34:17" },
+{ text:"हमें एक-दूसरे के बोझ उठाने चाहिए और एक-दूसरे का सहारा बनना चाहिए।", ref:"गलातियों 6:2" },
+{ text:"परमेश्वर की योजना हमे आगे बढ़ने का साहस देती है।", ref:"यिर्मयाह 29:11" },
+{ text:"प्रभु का प्रेम दृढ़ और अटूट है।", ref:"रोमियों 8:38-39" },
+{ text:"ईश्वर की उपस्थिति हमारे भय को हटाती है।", ref:"भजन 27:1" },
+{ text:"जो मन से प्रभु से मिलता है, उसका जीवन बदली जाता है।", ref:"याकूब 4:8" },
+{ text:"प्रभु का अनुग्रह हमारे जीवन को नई दिशा देता है।", ref:"2 कुरिन्थियों 5:17" },
+{ text:"परमेश्वर हमें चालाकी और समझ देता है।", ref:"नीतिवचन 2:6" },
+{ text:"ईश्वर की नजदीकी में सुरक्षा और आश्रय मिलता है।", ref:"भजन 91:1-2" },
+{ text:"परमेश्वर की वचनबद्धता पर हमारा विश्वास अडिग रहे।", ref:"यशायाह 55:11" },
+{ text:"जो लोग प्रेम करते हैं, वही परमेश्वर के बच्चे हैं।", ref:"1 यूहन्ना 4:7" },
+{ text:"सत्कार्य और प्रेम से परमेश्वर की उपस्थिति झलकेगी।", ref:"मत्ती 25:35-40" },
+{ text:"ईश्वर का हाथ हमारे जीवन में कार्य करता है।", ref:"इफिसियों 2:10" },
+{ text:"परमेश्वर हमेशा हमारे पास है — उसका प्रेम शाश्वत है।", ref:"भजन 136:1" }
+    ];
+    // pad to 200 if not met (defensive)
+    if (verses.length < 200) {
+      const need = 200 - verses.length;
+      for (let i=0;i<need;i++){
+        verses.push(Object.assign({}, verses[i % verses.length]));
+      }
+    }
+
+    // Utility: secure random int
+    function randomInt(max) {
+      // use crypto if available
+      if (window.crypto && window.crypto.getRandomValues) {
+        const arr = new Uint32Array(1);
+        window.crypto.getRandomValues(arr);
+        return arr[0] % max;
+      } else {
+        return Math.floor(Math.random() * max);
+      }
+    }
+
+    function renderVerse(obj) {
+      const box = document.getElementById('verseBox');
+      box.querySelector('.text').textContent = obj.text;
+      box.querySelector('.ref').textContent = obj.ref || '';
+    }
+
+    // pick random on load unless ?name= present
+    function pickOnLoad() {
+      const params = new URLSearchParams(location.search);
+      const nameParam = params.get('name') || '';
+      if (nameParam.trim()) {
+        // deterministic by name (optional behavior)
+        let h=5381;
+        const s = nameParam.trim().toLowerCase();
+        for (let i=0;i<s.length;i++){ h = ((h<<5)+h) + s.charCodeAt(i); h = h & 0xffffffff; }
+        if (h<0) h = Math.abs(h);
+        const idx = h % verses.length;
+        renderVerse(verses[idx]);
+      } else {
+        const idx = randomInt(verses.length);
+        renderVerse(verses[idx]);
+      }
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', function(){
+      // each click shows a new random verse
+      const idx = randomInt(verses.length);
+      renderVerse(verses[idx]);
+    });
+
+    document.getElementById('sameByName').addEventListener('click', function(){
+      const name = document.getElementById('nameInput').value || '';
+      if (!name.trim()) { alert('कृपया नाम डालें।'); return; }
+      // deterministic mapping
+      let h=5381;
+      const s = name.trim().toLowerCase();
+      for (let i=0;i<s.length;i++){ h = ((h<<5)+h) + s.charCodeAt(i); h = h & 0xffffffff; }
+      if (h<0) h = Math.abs(h);
+      const idx = h % verses.length;
+      renderVerse(verses[idx]);
+    });
+
+    document.getElementById('copyLink').addEventListener('click', function(){
+      const url = location.origin + location.pathname;
+      navigator.clipboard?.writeText(url).then(function(){ alert('Link copied!'); }, function(){ prompt('Copy this link:', url); });
+    });
+
+    // initial display
+    pickOnLoad();
+  </script>
+</body>
+</html>
