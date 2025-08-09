@@ -4,83 +4,108 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Bible Verse — Hindi & English</title>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Cinzel:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
   body {
     margin: 0;
     font-family: 'Merriweather', serif;
-    background: linear-gradient(180deg, #fffaf0, #fdf5e6);
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
     color: #2e2e2e;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    min-height: 100vh;
   }
   .wrap {
     max-width: 800px;
     width: 100%;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-    padding: 28px;
-    border: 2px solid #f5deb3;
+    background: rgba(255,255,255,0.96);
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(99,160,255,0.18), 0 0 0 8px #f9e7c3;
+    padding: 32px 28px;
+    border: 2px solid #ddb892;
+    position: relative;
   }
   header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
+    position: relative;
   }
-  .cross {
-    font-family: 'Cinzel', serif;
-    font-size: 40px;
-    color: goldenrod;
+  .spiritual-svg {
+    display: block;
+    margin: 0 auto 8px auto;
+    width: 54px;
+    height: 54px;
   }
   h1 {
     margin: 0;
     font-family: 'Cinzel', serif;
-    font-size: 26px;
+    font-size: 30px;
     color: #b8860b;
+    text-shadow: 0 2px 6px #f9e7c3;
   }
   p.lead {
     color: #6b6b6b;
-    font-size: 14px;
+    font-size: 16px;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .divider {
+    height: 2px;
+    width: 80px;
+    margin: 14px auto;
+    border: none;
+    background: linear-gradient(90deg, #f6d365, #fda085);
+    border-radius: 2px;
   }
   .form {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 18px;
+    justify-content: center;
   }
   input[type=text] {
     flex: 1;
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid #e6d8ad;
-    font-size: 16px;
+    border: 1.5px solid #e6d8ad;
+    font-size: 17px;
+    background: #f7f3ed;
+    box-shadow: 0 2px 8px rgba(218,165,32,0.09);
   }
   button.submit {
-    background: linear-gradient(180deg, goldenrod, #daa520);
+    background: linear-gradient(180deg, #b8860b 0%, #f6d365 100%);
     border: none;
     color: white;
-    padding: 10px 18px;
+    padding: 11px 22px;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 6px 15px rgba(218,165,32,0.3);
+    font-size: 17px;
+    box-shadow: 0 6px 15px rgba(218,165,32,0.13);
+    transition: background .2s;
+  }
+  button.submit:hover {
+    background: linear-gradient(180deg, #fda085 0%, #f6d365 100%);
   }
   .verseArea {
-    margin-top: 20px;
+    margin-top: 22px;
     display: flex;
-    gap: 16px;
+    gap: 18px;
+    justify-content: center;
   }
   .col {
     flex: 1;
     background: #fffdf7;
-    border: 1px solid #f5deb3;
-    border-radius: 10px;
-    padding: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    border: 1.5px solid #f5deb3;
+    border-radius: 12px;
+    padding: 18px 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07), 0 0 12px #ffe589;
     opacity: 0;
-    transform: translateY(10px);
-    transition: all .4s ease;
+    transform: translateY(18px);
+    transition: all .5s cubic-bezier(.33,1.4,.62,1);
+    min-width: 220px;
   }
   .col.show {
     opacity: 1;
@@ -88,22 +113,47 @@
   }
   .langTitle {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
     color: #8b6914;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
+    font-family: 'Cinzel', serif;
   }
   .verseText {
-    font-size: 17px;
-    line-height: 1.5;
-    margin-bottom: 8px;
+    font-size: 21px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    font-family: 'Great Vibes', cursive;
+    color: #432c06;
+    text-shadow: 0 1px 6px #f9e7c3;
+    position: relative;
+  }
+  .verseText::before, .verseText::after {
+    content: "“";
+    font-size: 32px;
+    color: #eec97f;
+    position: absolute;
+    left: -18px;
+    top: -14px;
+    font-family: 'Cinzel', serif;
+  }
+  .verseText::after {
+    content: "”";
+    left: unset;
+    right: -18px;
+    top: -14px;
   }
   .ref {
     font-weight: bold;
-    color: goldenrod;
+    color: #b8860b;
+    text-align: right;
+    font-size: 17px;
+    font-family: 'Cinzel', serif;
+    margin-top: 6px;
   }
   @media (max-width: 768px) {
     .verseArea {
       flex-direction: column;
+      gap: 10px;
     }
   }
 </style>
@@ -111,8 +161,13 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="cross">✝</div>
+    <svg class="spiritual-svg" viewBox="0 0 54 54" fill="none">
+      <circle cx="27" cy="27" r="25" stroke="#f6d365" stroke-width="3" fill="#fffbe8"/>
+      <path d="M27 12 L27 42" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+      <path d="M17 27 L37 27" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+    </svg>
     <h1>Bible Verse for You</h1>
+    <hr class="divider" />
     <p class="lead">Enter your name and receive a scripture verse — Hindi & English</p>
   </header>
 
