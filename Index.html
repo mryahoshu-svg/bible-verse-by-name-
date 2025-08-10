@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bible Verse — Guidance, Blessings, Help (Hindi)</title>
+<style>
+  body {
+    background: linear-gradient(180deg, #fdf8f3 0%, #fffaf3 100%);
+    font-family: 'Merriweather', serif;
+    color: #3b2f2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+  }
+  .container {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(120, 90, 40, 0.15);
+    max-width: 700px;
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+  }
+  h1 {
+    font-family: 'Cinzel', serif;
+    color: #8b5e2b;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #6b5b4b;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  input[type=text] {
+    padding: 12px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #e0c9a6;
+    width: 70%;
+    margin-right: 10px;
+  }
+  button {
+    background: linear-gradient(180deg, #d4a24c, #b07b27);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(160, 120, 40, 0.2);
+  }
+  button:hover {
+    background: linear-gradient(180deg, #b07b27, #8a5f1d);
+  }
+  .verse {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff9f0;
+    border-radius: 12px;
+    border: 1px solid #f3e1c3;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .verse .text {
+    font-size: 18px;
+    color: #3b2f2f;
+  }
+  .verse .ref {
+    font-weight: 700;
+    color: #8b5e2b;
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+  .footer {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #777;
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>बाइबल वचन — मार्गदर्शन, आशीर्वाद और सहायता</h1>
+    <p>अपना नाम डालें और अपना खास वचन देखें, या बिना नाम के यादृच्छिक वचन पाने के लिए 'रैंडम वचन' दबाएं।</p>
+    <input id="nameInput" type="text" placeholder="नाम डालें (optional)" />
+    <button id="showByName">नाम से वचन दिखाएँ</button>
+    <button id="showRandom">रैंडम वचन</button>
+    <div class="verse" id="verseBox" aria-live="polite" aria-atomic="true">
+      <div class="text">यहाँ वचन दिखेगा...</div>
+      <div class="ref"></div>
+    </div>
+    <div class="footer">आप यह पेज ऑफलाइन भी इस्तेमाल कर सकते हैं।</div>
+  </div>
+
+<script>
+  const verses = [
+    // Guidance
+    { text: "अपने पूरे मन से यहोवा पर भरोसा रख, और अपनी समझ पर निर्भर न हो; अपनी सब राहों में उसी को मान, और वह तुम्हारे मार्ग सीधा कर देगा।", ref: "नीतिवचन 3:5-6" },
+    { text: "अपने मार्ग मुझे दिखा, हे यहोवा; और मुझे अपनी राह सिखा।", ref: "भजन 25:4" },
+    { text: "वह दीनों को सही राह दिखाता है, और उन्हें अपनी राह सिखाता है।", ref: "भजन 25:9" },
+    { text: "मैं तुम्हें मार्गदर्शन करूँगा, अपनी दृष्टि से तुम्हें राह दिखाऊँगा।", ref: "भजन 32:8" },
+    { text: "यदि किसी के पास बुद्धि की कमी हो, तो वह परमेश्वर से माँगे; वह बिना दोष के देता है।", ref: "याकूब 1:5" },
+    { text: "यहोवा हमेशा तुम्हारी राह दिखाएगा; तुम्हारी आत्मा को तृप्त करेगा, तुम्हें शक्ति देगा। तुम जलते बाग की तरह रहोगे।", ref: "यशायाह 58:11" },
+    { text: "जब तुम दाहिने या बाएँ मुड़ो, तो तुम्हारे पीछे सुनाई देगा – ‘यही राह है, इसी पर चढ़ो।’", ref: "यशायाह 30:21" },
+    { text: "परमेश्वर की योजना तुम्हारे भले के लिए है; तुम्हें भविष्य और आशा देगा।", ref: "यिर्मयाह 29:11" },
+    { text: "परमेश्वर के वचन जीवन और प्रकाश देते हैं।", ref: "यूहन्ना 6:63" },
+    { text: "जो प्रभु पर भरोसा करते हैं उन्हें नई शक्ति मिलेगी; वे परिंदों की भाँति ऊपर उड़ेंगे।", ref: "यशायाह 40:31" },
+    { text: "जो प्रभु की ओर सहायता के लिए पुकारते हैं, उन्हें वह जवाब देता है।", ref: "भजन 50:15" },
+    { text: "परमेश्वर की वचनें हमारी आत्मा को तृप्त करती हैं।", ref: "भजन 119:103" },
+    { text: "जो मन से प्रभु से मिलता है, उसका जीवन बदल जाता है।", ref: "याकूब 4:8" },
+    { text: "प्रभु के मार्ग सत्य और न्याय के मार्ग हैं।", ref: "भजन 23:3" },
+    { text: "परमेश्वर अपनी शिक्षा से हमें ठीक रास्ते पर ले जाता है।", ref: "नीतिवचन 4:11" },
+    { text: "मेरे मार्गदर्शन के लिए प्रभु पर भरोसा रखो, वह तुम्हें मजबूत करेगा।", ref: "भजन 23:3" },
+    { text: "तुम प्रभु से सलाह माँगो, वह तुम्हें सही दिशा देगा।", ref: "नीतिवचन 11:14" },
+    { text: "परमेश्वर के मार्गों पर चलो और जीवन पाओ।", ref: "नीतिवचन 3:17" },
+    { text: "परमेश्वर के साथ आशा रखना हमारे जीवन में नयापन लाता है।", ref: "यिर्मयाह 29:11" },
+    { text: "परमेश्वर की सहायता से हम भय पर विजय पाएँगे।", ref: "यशायाह 41:13" },
+
+    // Blessings
+    { text: "यहोवा तुम्हें आशीर्वाद दे और तुम्हें सुरक्षित रखे; उसके चेहरे की रोशनी तुम पर चमके; वह तुम्हें शांति दे।", ref: "परोस 6:24-26" },
+    { text: "और मेरा परमेश्वर अपनी महिमा के अनुसार तुम्हारी प्रत्येक आवश्यकता मसीह यीशु में पूरी करेगा।", ref: "फिलिप्पियों 4:19" },
+    { text: "जो पहले अपने राज्य और धर्म को खोजते हैं, उन्हें और सब वस्तुएँ दी जाएँगी।", ref: "मत्ती 6:33" },
+    { text: "प्रभु तुम्हें आशीर्वाद देगा और तुम्हें शांति देगा।", ref: "परोस 10:22" },
+    { text: "परमेश्वर की दया हर सुबह नई होती है।", ref: "भजन 30:5" },
+    { text: "यहोवा तुम्हारे लिए युद्ध करेगा; तुम शांत रहो।", ref: "निर्गमन 14:14" },
+    { text: "हे यहोवा, तेरा प्रेम सदा स्थिर है; तुम्हारा विश्वास हमेशा रहेगा।", ref: "भजन 89:1" },
+    { text: "प्रभु हमारे साथ है — वह हमारा सहारा और शक्ति है।", ref: "भजन 46:1" },
+    { text: "परमेश्वर की दया हर सुबह नई होती है; उसी पर भरोसा रखो।", ref: "भजन 30:5" },
+    { text: "जो लोग मेल मिलाप करते हैं वे परमेश्वर के पुत्र कहलाएँगे।", ref: "मत्ती 5:9" },
+    { text: "परमेश्वर तुम्हें खुशहाली, लंबी उम्र और शांति से भर देगा।", ref: "भजन 128:1-4" },
+    { text: "प्रभु की कृपा से तुम्हारा घर भरा-पूरा होगा।", ref: "नीतिवचन 3:33" },
+    { text: "जो व्यक्ति प्रेमपूर्वक चलता है, उसके रास्ते आशीर्वाद से भरपूर होंगे।", ref: "नीतिवचन 16:20" },
+    { text: "परमेश्वर की दया से मनुष्य को जीवन मिलता है।", ref: "नीतिवचन 19:23" },
+    { text: "परमेश्वर का आशीर्वाद धन और सम्मान दोनों देता है।", ref: "नीतिवचन 22:4" },
+    { text: "प्रभु की इच्छाएँ हमारे लिए भलाई लेकर आती हैं।", ref: "यिर्मयाह 29:11" },
+    { text: "प्रभु की शांति तुम्हें संतोष और आनंद दे।", ref: "रोमियों 15:13" },
+    { text: "जो अपनी बुद्धि प्रभु से पाते हैं, वे समृद्ध होंगे।", ref: "नीतिवचन 8:18" },
+    { text: "परमेश्वर की आशीर्वाद हमें जीवन की कठिनाइयों से ऊपर उठाती है।", ref: "2 कुरिन्थियों 9:8" },
+    { text: "परमेश्वर हमारे सुख और आनंद का स्रोत है।", ref: "भजन 16:11" },
+
+    // Help
+    { text: "मत डर, क्योंकि मैं तेरे साथ हूँ; मैं तुझे सहायता दूँगा, और अपने हमेशा न्यायपूर्ण दाहिने हाथ से तुझे थामूँगा।", ref: "यशायाह 41:10" },
+    { text: "मैं ने अपनी आँखें पहाड़ों की ओर उठाईं—मेरी सहायता कहाँ से आएगी? मेरी सहायता यहोवा से आती है, जिसने स्वर्ग और पृथ्वी बनाई है।", ref: "भजन 121:1-2" },
+    { text: "ईश्वर हमारे दुःखों का साथी है और हमारी सहायता करता है।", ref: "2 कुरिन्थियों 1:3-4" },
+    { text: "जो धर्मी सहायता मांगते हैं, तो प्रभु सुनता है और उन्हें सभी संकटों से छुटकारा देता है।", ref: "भजन 34:17" },
+    { text: "प्रभु तुम्हें शांति देगा; उसका चेहरा तुम पर चमके।", ref: "2 थेसलोनियों 3:16" },
+    { text: "परमेश्वर ने हमको भय की आत्मा नहीं दी, बल्कि शक्ति और प्रेम और संयम की।", ref: "2 तीमुथियुस 1:7" },
+    { text: "मैं तुमसे वचन देता हूँ: मैं तुम्हें कभी नहीं छोड़ूँगा और न तुम्हें तिरस्कृत करूँगा।", ref: "इब्रानियों 13:5" },
+    { text: "परमेश्वर हमें अपनी शक्ति से संभालेगा और हमें नई आशा देगा।", ref: "यशायाह 43:1-2" },
+    { text: "तुम्हारा हर काम प्रेम से किया जाए।", ref: "1 कुरिन्थियों 16:14" },
+    { text: "जो कोई प्रभु में विश्वास रखता है, उसके लिये सब कुछ संभव है।", ref: "मरकुस 9:23" },
+    { text: "प्रभु हमारी सहायता के लिए सदा तत्पर रहता है।", ref: "भजन 46:1" },
+    { text: "परमेश्वर हमारे दुःखों को समझता है और हमें सहारा देता है।", ref: "भजन 34:18" },
+    { text: "परमेश्वर से सहायता माँगो, वह तुम्हें नई शक्ति देगा।", ref: "यशायाह 40:29" },
+    { text: "मैं प्रभु पर पूरी तरह निर्भर हूँ, वह मेरी सहायता है।", ref: "भजन 18:2" },
+    { text: "जो प्रभु की ओर सहायता के लिए पुकारते हैं, उन्हें वह जवाब देता है।", ref: "भजन 50:15" },
+    { text: "ईश्वर की सहायता के बिना हम कुछ भी नहीं कर सकते।", ref: "यूहन्ना 15:5" },
+    { text: "परमेश्वर अपने लोगों का बचाव करता है और उनकी रक्षा करता है।", ref: "भजन 34:7" },
+    { text: "प्रभु को पुकारो, वह तुम्हारी सहायता करेगा।", ref: "यशायाह 41:13" },
+    { text: "मैं प्रभु से अपने संकट में मदद माँगता हूँ और वह मेरी सहायता करता है।", ref: "भजन 86:7" },
+    { text: "जो मनुष्य परमेश्वर की सहायता पर भरोसा करता है, उसे कभी शर्म नहीं होगी।", ref: "यशायाह 50:7" }
+  ];
+
+  function randomInt(max) {
+    if (window.crypto && window.crypto.getRandomValues) {
+      const arr = new Uint32Array(1);
+      window.crypto.getRandomValues(arr);
+      return arr[0] % max;
+    } else {
+      return Math.floor(Math.random() * max);
+    }
+  }
+
+  function renderVerse(verse) {
+    const box = document.getElementById('verseBox');
+    box.querySelector('.text').textContent = verse.text;
+    box.querySelector('.ref').textContent = verse.ref || '';
+  }
+
+  // Hash function to convert name to deterministic index
+  function hashName(name) {
+    let h = 5381;
+    const s = name.trim().toLowerCase();
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) + h) + s.charCodeAt(i);
+      h = h & 0xffffffff;
+    }
+    if (h < 0) h = Math.abs(h);
+    return h;
+  }
+
+  function showByName() {
+    const nameInput = document.getElementById('nameInput').value;
+    if (!nameInput.trim()) {
+      alert('कृपया नाम डालें।');
+      return;
+    }
+    const idx = hashName(nameInput) % verses.length;
+    renderVerse(verses[idx]);
+  }
+
+  function showRandom() {
+    const idx = randomInt(verses.length);
+    renderVerse(verses[idx]);
+  }
+
+  // Initial display: random verse
+  showRandom();
+
+  document.getElementById('showByName').addEventListener('click', showByName);
+  document.getElementById('showRandom').addEventListener('click', showRandom);
+
+</script>
+</body>
+</html>
