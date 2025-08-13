@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Spiritual Church Logo</title>
+  <style>
+    body {
+      background-color: #fdf6e3;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      color: #2c3e50;
+      animation: fadeInBody 2s ease-in;
+    }
+
+    .logo-container {
+      padding: 20px;
+      animation: fadeInLogo 2.5s ease-in-out;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 15px;
+      line-height: 1.6;
+      animation: fadeInText 3s ease-in-out;
+    }
+
+    .logo-parchment {
+      display: inline;
+      width: 180px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    .logo-glow {
+      display: none;
+    }
+
+    @media screen and (max-width: 600px) {
+      .logo-parchment {
+        display: none;
+      }
+      .logo-glow {
+        display: inline;
+        width: 180px;
+        filter: drop-shadow(0 0 8px #d4af37);
+      }
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInLogo {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🎶 Background Music -->
+  <audio autoplay loop>
+    <source src="audio/church-melody.mp3" type="audio/mpeg">
+    आपका ब्राउज़र ऑडियो सपोर्ट नहीं करता।
+  </audio>
+
+  <div class="logo-container">
+    <img src="images/logo-parchment-white.png" alt="Parchment Logo" class="logo-parchment" />
+    <img src="images/logo-glow-golden.png" alt="Glowing Logo" class="logo-glow" />
+    <p class="logo-text">
+      मैं चर्च हूँ<br/>मी चर्च आहे
+    </p>
+  </div>
+</body>
+</html>
