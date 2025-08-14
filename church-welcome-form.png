@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Blessing</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f5f0;
+    }
+
+    #welcome-section {
+      background-image: url('images/church-welcome-form.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .form-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 6px;
+      width: 250px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .blessing {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <section id="welcome-section">
+    <div class="form-box">
+      <h2>आपका नाम दर्ज करें</h2>
+      <input type="text" id="username" placeholder="आपका नाम">
+      <br>
+      <button onclick="showBlessing()">आशीर्वाद प्राप्त करें</button>
+      <div class="blessing" id="blessing-text"></div>
+    </div>
+  </section>
+
+  <script>
+    function showBlessing() {
+      const name = document.getElementById('username').value.trim();
+      const blessing = name
+        ? `${name}, मैं चर्च हूँ / मी चर्च आहे — परमेश्वर की कृपा आपके साथ हो।`
+        : 'कृपया अपना नाम दर्ज करें।';
+      document.getElementById('blessing-text').textContent = blessing;
+    }
+  </script>
+
+</body>
+</html>
