@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Our Church</title>
+  <style>
+    /* Fade-in effect for audio */
+    #welcomeMusic {
+      opacity: 0;
+      transition: opacity 3s ease-in;
+    }
+    body.loaded #welcomeMusic {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Church Intro Music -->
+  <audio id="welcomeMusic" autoplay loop>
+    <source src="audio/luminoso_church_intro.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Add fade-in effect after page loads
+    window.addEventListener('load', function () {
+      document.body.classList.add('loaded');
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+📁 Folder Structure Required
+Make sure your repo looks like this:
+church-website/
+├── index.html
+├── audio/
+│   └── luminoso_church_intro.mp3
+
+
+Agar aapne file root mein upload ki hai, to src="luminoso_church_intro.mp3" likhna hoga.
+
+
+Aap chahein to main ismein aur bhi add kar sakta hoon:
+- 🎚 Volume control
+- 🎵 Music toggle button (Play/Pause)
+- 🙏 Personalized blessing with music
+Boliye, next kya add karna hai?
