@@ -1,38 +1,72 @@
-/* Basic layout */
 :root{
-  --bg:#0b1020;
-  --card:#0f1724;
-  --muted:#9aa6bf;
-  --accent:#ffd166;
+  --bg1: #f6efe6;
+  --bg2: #efe6f3;
+  --card-bg: rgba(255,255,255,0.9);
+  --accent: #6b4226;
+  --muted: #6b6b6b;
+  --glass: rgba(255,255,255,0.6);
 }
 
-html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-body{background:linear-gradient(180deg,var(--bg),#071020);color:#e6eef8;display:flex;align-items:center;justify-content:center;padding:32px}
-.app{max-width:760px;width:100%}
-.site-header{margin-bottom:12px}
-.site-header h1{margin:0;font-size:1.6rem}
-.subtitle{margin:4px 0 0;color:var(--muted);font-size:0.9rem}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(circle at top left, var(--bg1) 0%, transparent 30%),
+              radial-gradient(circle at bottom right, var(--bg2) 0%, transparent 30%),
+              linear-gradient(180deg, #fffaf6 0%, #f3f6fb 100%);
+  color: #222;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:24px;
+}
 
-.controls{display:flex;gap:8px;align-items:center;margin:14px 0}
-.controls label{color:var(--muted);font-size:0.85rem}
-.controls select,input[type=number]{padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit}
-.controls button{background:var(--accent);border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+/* Page layout */
+.page{
+  max-width:760px;
+  margin:12px auto;
+  padding:18px;
+  backdrop-filter: blur(6px) saturate(120%);
+}
 
-#verse-card{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-.verse{min-height:96px;display:flex;flex-direction:column;gap:10px}
+/* Header */
+.site-header{ text-align:center; margin-bottom:18px; }
+.site-header .logo{ width:64px; height:64px; object-fit:contain; display:block; margin:0 auto 8px; }
+.site-header h1{ font-family:"Merriweather", serif; color:var(--accent); margin:0; font-size:1.9rem; }
+.site-header .subtitle{ color:var(--muted); margin-top:6px; }
 
-/* Bilingual styles: English on top, alternate beneath */
-.lang{line-height:1.5}
-.lang.en{font-size:1.05rem}
-.lang.alt{font-size:0.95rem;color:var(--muted);opacity:0.95;border-left:3px solid rgba(255,209,102,0.06);padding-left:10px}
+/* Controls */
+.controls{ display:flex; gap:8px; justify-content:center; align-items:center; margin:18px 0; flex-wrap:wrap; }
+.controls input{
+  padding:10px 12px; border-radius:10px; border:1px solid #ebdfd0; width:220px;
+  box-shadow: 0 6px 14px rgba(105,75,55,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.controls button{
+  padding:10px 14px; border-radius:10px; border:0; background:var(--accent); color:#fff; cursor:pointer;
+  box-shadow: 0 6px 12px rgba(107,66,38,0.12);
+}
+.controls #toggleAudio{ background:transparent; color:var(--accent); font-size:1.1rem; box-shadow:none; }
 
-/* Overlay for autoplay prompt */
-.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,6,23,0.6),rgba(2,6,23,0.9));backdrop-filter: blur(4px);}
-.overlay.hidden{display:none}
-.overlay-inner{background:var(--card);padding:20px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);text-align:center}
-.overlay-inner p{margin:0 0 12px;color:var(--muted)}
-.overlay-inner button{background:var(--accent);padding:8px 14px;border-radius:8px;border:none;cursor:pointer}
+/* Verse card */
+.verse-card{ margin-top:12px; padding:20px; border-radius:14px; background:var(--card-bg); box-shadow: 0 10px 30px rgba(47,38,27,0.08); }
+.hidden{ display:none; }
+.verse-text{ font-family:"Merriweather", serif; font-size:1.3rem; color:#2b1f16; line-height:1.5; opacity:0; transform:translateY(6px); transition: all 450ms ease; }
+.verse-text.visible{ opacity:1; transform:translateY(0); }
+.verse-ref{ margin-top:10px; color:var(--muted); font-size:0.95rem; text-align:right; }
+.verse-actions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; }
+.verse-actions button{ padding:8px 12px; border-radius:8px; border:1px solid #e8dcd0; background:transparent; cursor:pointer; }
 
+/* Prayer */
+.prayer{ margin-top:20px; padding:14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.55)); box-shadow: 0 6px 18px rgba(26,20,16,0.05); }
+.prayer h2{ margin:0 0 6px 0; font-family:"Merriweather", serif; color:var(--accent); }
+.prayer p{ margin:0 0 8px 0; color:var(--muted); }
+#amen{ background:var(--accent); color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+/* Footer */
+.site-footer{ text-align:center; margin-top:18px; color:var(--muted); font-size:0.85rem; }
+
+/* Responsive */
 @media (max-width:520px){
-  .controls{flex-wrap:wrap}
+  .page{ padding:12px; margin:6px; }
+  .controls input{ width:160px; }
 }

@@ -1,53 +1,67 @@
 <!doctype html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bible Verse by Name — Bilingual</title>
+  <title>Bible Verse by Name — Spiritual</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="spiritual.css">
+  <style>
+    /* overlay style small helper (in case spiritual.css not loaded yet) */
+    .play-overlay{
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(180deg, rgba(10,10,10,0.45), rgba(0,0,0,0.6));
+      color:#fff; font-family:inherit; z-index:9999; text-align:center; padding:18px;
+      backdrop-filter: blur(4px);
+    }
+    .play-overlay .btn{ background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.12); padding:12px 18px; border-radius:10px; color:#fff; font-weight:600; }
+    .play-overlay .small{ margin-top:10px; opacity:0.9; font-size:0.9rem; color: #f0f0f0; }
+    .visually-hidden{ position:absolute!important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+  </style>
 </head>
 <body>
-  <div class="app">
+  <main class="page">
     <header class="site-header">
-      <h1>Bible Verse by Name</h1>
-      <p class="subtitle">Bilingual verses • cycle-per-name • ambient audio</p>
+      <img src="church-logo.html" alt="logo" class="logo" onerror="this.style.display='none'">
+      <h1>Prarthana aur Vachan</h1>
+      <p class="subtitle">Naam dalein, aur prabhu ka ek anugrah bhara vachan paayein</p>
     </header>
 
     <section class="controls">
-      <label for="name-select">Choose a name</label>
-      <select id="name-select" aria-label="Name selector"></select>
-
-      <label for="cycles">Cycles per name</label>
-      <input id="cycles" type="number" min="1" value="1" aria-label="Cycles per name">
-
-      <button id="next-btn">Next</button>
+      <input id="nameInput" type="text" placeholder="Naam likhein (jaise: Rahul)" aria-label="Naam">
+      <button id="getVerse">Prapt Karein</button>
+      <button id="toggleAudio" title="Play / Pause ambient">🔈</button>
     </section>
 
-    <main id="verse-card">
-      <article class="verse bilingual" role="region" aria-live="polite">
-        <div id="verse-en" class="lang en"></div>
-        <div id="verse-alt" class="lang alt"></div>
-      </article>
-    </main>
-
-    <!-- Ambient audio with a fallback source (mp3 primary, ogg fallback) -->
-    <audio id="ambient-audio" preload="auto" loop>
-      <source src="audio/ambient.mp3" type="audio/mpeg">
-      <source src="audio/ambient.ogg" type="audio/ogg">
-      <!-- Fallback text in case audio isn't supported -->
-      Your browser does not support the audio element.
-    </audio>
-
-    <!-- Autoplay overlay shown when autoplay is blocked by the browser -->
-    <div id="autoplay-overlay" class="overlay hidden" role="dialog" aria-modal="true">
-      <div class="overlay-inner">
-        <p>Autoplay was blocked. Click to enable sound and continue autoplay.</p>
-        <button id="enable-audio">Enable audio & autoplay</button>
+    <section id="verseCard" class="verse-card hidden" aria-live="polite">
+      <div id="verseText" class="verse-text"></div>
+      <div id="verseRef" class="verse-ref"></div>
+      <div class="verse-actions">
+        <button id="another">Agla Vachan</button>
+        <button id="share">Share</button>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <aside class="prayer">
+      <h2>Ek chhoti prarthana</h2>
+      <p>Prabhu, humein apni daya se dharohar dena aur humare jeevan ko aashirwadit karein. Har naam par ek vachan se humare hriday ko shanti mile.</p>
+      <button id="amen">Amen 🙏</button>
+    </aside>
 
+    <footer class="site-footer">
+      <small>© Aapka seva — Bhagwan ka anugrah sadaa bana rahe</small>
+    </footer>
+  </main>
+
+  <!-- Ambient audio (external) -->
+  <audio id="ambientAudio" loop preload="none" playsinline>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Verse picker script -->
   <script src="verse-picker.js"></script>
 </body>
 </html>
