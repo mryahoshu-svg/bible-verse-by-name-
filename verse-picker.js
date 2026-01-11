@@ -1,101 +1,122 @@
-(function(){
-  // Demo fallback (replace or extend with your real data)
-  const demo = {
-    rahul: [
-      {text: "Yahovah tumhara palan kare aur tumhe shant rakhe.", ref: "Numbers 6:24"},
-      {text: "Prabhu tum sab ka palan kare aur tumhe sukh de.", ref: "Psalm 20:4"},
-      {text: "Prabhu tumpar dayalu ho aur tumhe ashish de.", ref: "Numbers 6:25"}
-    ],
-    default: [
-      {text: "Prabhu tumhara sharan hai; us par bharosa rakho.", ref: "Psalm 37:5"},
-      {text: "Uska prem sadaiv sthir rahega.", ref: "Lamentations 3:22"}
-    ]
-  };
+/* verse-picker.js
+   - Adds bilingual verses
+   - Supports cycles per name (cycle-per-name)
+   - Handles autoplay overlay when audio is blocked
+   - Attempts to play ambient audio and falls back to showing overlay
+*/
 
-  // use existing global object if present
-  const versesByName = window.versesByName || demo;
+// Minimal bilingual verse dataset. Expand as needed.
+const VERSES = {
+  "Jesus": [
+    { en: "For God so loved the world, that he gave his only Son... (John 3:16)", alt: "Porque de tal manera amó Dios al mundo, que dio a su Hijo unigénito... (Juan 3:16)" },
+    { en: "I am the way, and the truth, and the life... (John 14:6)", alt: "Yo soy el camino, la verdad y la vida... (Juan 14:6)" }
+  ],
+  "Mary": [
+    { en: "Blessed are you among women... (Luke 1:42)", alt: "Bendita tú entre las mujeres... (Lucas 1:42)" },
+    { en: "My soul magnifies the Lord... (Luke 1:46)", alt: "Mi alma engrandece al Señor... (Lucas 1:46)" }
+  ],
+  "David": [
+    { en: "The LORD is my shepherd; I shall not want... (Psalm 23:1)", alt: "Jehová es mi pastor; nada me faltará... (Salmo 23:1)" }
+  ]
+};
 
-  // cycle picker: no repeat until all seen (per-name)
-  function pickInCycle(list, nameKey){
-    const key = 'cycleIndex_' + nameKey;
-    let idx = parseInt(localStorage.getItem(key), 10);
-    if (isNaN(idx)) idx = 0;
-    const item = list[idx % list.length];
-    idx = (idx + 1) % list.length;
-    localStorage.setItem(key, String(idx));
-    return item;
+// State
+let currentName = null;
+let currentIndex = 0; // index within name's verse array
+let currentCycle = 0; // cycles shown for currentIndex
+const nameSelect = document.getElementById('name-select');
+const verseEn = document.getElementById('verse-en');
+const verseAlt = document.getElementById('verse-alt');
+const cyclesInput = document.getElementById('cycles');
+const nextBtn = document.getElementById('next-btn');
+const ambientAudio = document.getElementById('ambient-audio');
+const overlay = document.getElementById('autoplay-overlay');
+const enableAudioBtn = document.getElementById('enable-audio');
+
+// Populate name selector
+function populateNames(){
+  const names = Object.keys(VERSES);
+  names.forEach((n) => {
+    const opt = document.createElement('option');
+    opt.value = n;
+    opt.textContent = n;
+    nameSelect.appendChild(opt);
+  });
+  if(names.length) {
+    nameSelect.value = names[0];
+    selectName(names[0]);
   }
+}
 
-  // UI elements
-  const nameInput = document.getElementById('nameInput');
-  const btn = document.getElementById('getVerse');
-  const card = document.getElementById('verseCard');
-  const verseText = document.getElementById('verseText');
-  const verseRef = document.getElementById('verseRef');
-  const anotherBtn = document.getElementById('another');
-  const shareBtn = document.getElementById('share');
-  const amenBtn = document.getElementById('amen');
-  const audioBtn = document.getElementById('toggleAudio');
-  const ambient = document.getElementById('ambientAudio');
+function selectName(name){
+  if(!VERSES[name] || VERSES[name].length === 0) return;
+  currentName = name;
+  currentIndex = 0;
+  currentCycle = 0;
+  renderCurrent();
+}
 
-  function showVerseForName(nameRaw){
-    const name = (nameRaw || '').trim().toLowerCase() || 'default';
-    const list = versesByName[name] || versesByName.default || [];
-    if (!list.length) {
-      verseText.textContent = "Kshama karein — is naam ke liye abhi koi vachan uplabdh nahin.";
-      verseRef.textContent = "";
-      card.classList.remove('hidden');
-      verseText.classList.add('visible');
-      return;
-    }
-    const chosen = pickInCycle(list, name);
-    verseText.classList.remove('visible');
-    // small delay to allow fade-out/in
-    setTimeout(()=>{
-      verseText.textContent = chosen.text;
-      verseRef.textContent = chosen.ref || '';
-      card.classList.remove('hidden');
-      // trigger fade-in
-      setTimeout(()=>verseText.classList.add('visible'), 40);
-    }, 220);
+function renderCurrent(){
+  if(!currentName) return;
+  const verses = VERSES[currentName];
+  const v = verses[currentIndex];
+  verseEn.textContent = v.en;
+  verseAlt.textContent = v.alt;
+}
+
+function nextVerse(){
+  const cyclesPerName = Math.max(1, parseInt(cyclesInput.value, 10) || 1);
+  const verses = VERSES[currentName];
+  // Increase cycle count first
+  currentCycle++;
+  if(currentCycle >= cyclesPerName){
+    // advance to next verse
+    currentCycle = 0;
+    currentIndex = (currentIndex + 1) % verses.length;
   }
+  renderCurrent();
+}
 
-  btn?.addEventListener('click', ()=> showVerseForName(nameInput.value));
-  nameInput?.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') showVerseForName(nameInput.value); });
-  anotherBtn?.addEventListener('click', ()=> showVerseForName(nameInput.value));
-  shareBtn?.addEventListener('click', ()=>{
-    const text = verseText.textContent + (verseRef.textContent ? ' — ' + verseRef.textContent : '');
-    if (navigator.share) {
-      navigator.share({ title: 'Bible Vachan', text }).catch(()=>{});
-    } else {
-      navigator.clipboard.writeText(text).then(()=> alert('Vachan copied to clipboard'));
-    }
-  });
-  amenBtn?.addEventListener('click', ()=> {
-    alert('Amen 🙏\nAapka vachan aur prarthana bheja gaya.');
-  });
+// Autoplay handling: try to play ambient audio. If blocked, show overlay.
+function tryPlayAmbient(){
+  if(!ambientAudio) return;
+  // Attempt to play; many browsers block autoplay with sound
+  const playPromise = ambientAudio.play();
+  if(playPromise !== undefined){
+    playPromise.then(() => {
+      // playing
+      overlay.classList.add('hidden');
+    }).catch((err) => {
+      // autoplay blocked or other error - surface overlay
+      console.warn('Autoplay blocked or failed:', err && err.message);
+      overlay.classList.remove('hidden');
+    });
+  }
+}
 
-  // Audio toggle
-  audioBtn?.addEventListener('click', ()=>{
-    if (!ambient) return;
-    if (ambient.paused) {
-      ambient.play().catch(()=>{ /* autoplay may be blocked; user must press again */ });
-      audioBtn.textContent = '🔊';
-    } else {
-      ambient.pause();
-      audioBtn.textContent = '🔈';
-    }
-  });
+// Overlay click to enable audio
+enableAudioBtn && enableAudioBtn.addEventListener('click', () => {
+  overlay.classList.add('hidden');
+  if(ambientAudio){
+    // try to unmute and play, some browsers require user gesture
+    ambientAudio.muted = false;
+    ambientAudio.play().catch(err => console.warn('Play failed after user gesture:', err));
+  }
+});
 
-  // Optional: auto-focus input
-  nameInput?.focus();
+// Events
+nameSelect.addEventListener('change', (e) => selectName(e.target.value));
+nextBtn.addEventListener('click', () => nextVerse());
 
-  // If the page previously had a name param in URL, load it:
-  (function loadFromQuery(){
-    const p = new URLSearchParams(location.search).get('name');
-    if (p) {
-      nameInput.value = p;
-      showVerseForName(p);
-    }
-  })();
-})();
+// Initialize
+populateNames();
+// Start ambient audio attempt after DOM is ready
+window.addEventListener('load', () => {
+  // set muted true initially to give browsers a chance to autoplay; unmute on user gesture
+  if(ambientAudio){
+    ambientAudio.muted = true;
+    tryPlayAmbient();
+  }
+});
+
+// Accessibility: allow pressing space/enter on overlay's button (native) already handled
