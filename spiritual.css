@@ -1,0 +1,72 @@
+:root{
+  --bg1: #f6efe6;
+  --bg2: #efe6f3;
+  --card-bg: rgba(255,255,255,0.9);
+  --accent: #6b4226;
+  --muted: #6b6b6b;
+  --glass: rgba(255,255,255,0.6);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(circle at top left, var(--bg1) 0%, transparent 30%),
+              radial-gradient(circle at bottom right, var(--bg2) 0%, transparent 30%),
+              linear-gradient(180deg, #fffaf6 0%, #f3f6fb 100%);
+  color: #222;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:24px;
+}
+
+/* Page layout */
+.page{
+  max-width:760px;
+  margin:12px auto;
+  padding:18px;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* Header */
+.site-header{ text-align:center; margin-bottom:18px; }
+.site-header .logo{ width:64px; height:64px; object-fit:contain; display:block; margin:0 auto 8px; }
+.site-header h1{ font-family:"Merriweather", serif; color:var(--accent); margin:0; font-size:1.9rem; }
+.site-header .subtitle{ color:var(--muted); margin-top:6px; }
+
+/* Controls */
+.controls{ display:flex; gap:8px; justify-content:center; align-items:center; margin:18px 0; flex-wrap:wrap; }
+.controls input{
+  padding:10px 12px; border-radius:10px; border:1px solid #ebdfd0; width:220px;
+  box-shadow: 0 6px 14px rgba(105,75,55,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.controls button{
+  padding:10px 14px; border-radius:10px; border:0; background:var(--accent); color:#fff; cursor:pointer;
+  box-shadow: 0 6px 12px rgba(107,66,38,0.12);
+}
+.controls #toggleAudio{ background:transparent; color:var(--accent); font-size:1.1rem; box-shadow:none; }
+
+/* Verse card */
+.verse-card{ margin-top:12px; padding:20px; border-radius:14px; background:var(--card-bg); box-shadow: 0 10px 30px rgba(47,38,27,0.08); }
+.hidden{ display:none; }
+.verse-text{ font-family:"Merriweather", serif; font-size:1.3rem; color:#2b1f16; line-height:1.5; opacity:0; transform:translateY(6px); transition: all 450ms ease; }
+.verse-text.visible{ opacity:1; transform:translateY(0); }
+.verse-ref{ margin-top:10px; color:var(--muted); font-size:0.95rem; text-align:right; }
+.verse-actions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; }
+.verse-actions button{ padding:8px 12px; border-radius:8px; border:1px solid #e8dcd0; background:transparent; cursor:pointer; }
+
+/* Prayer */
+.prayer{ margin-top:20px; padding:14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.55)); box-shadow: 0 6px 18px rgba(26,20,16,0.05); }
+.prayer h2{ margin:0 0 6px 0; font-family:"Merriweather", serif; color:var(--accent); }
+.prayer p{ margin:0 0 8px 0; color:var(--muted); }
+#amen{ background:var(--accent); color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+/* Footer */
+.site-footer{ text-align:center; margin-top:18px; color:var(--muted); font-size:0.85rem; }
+
+/* Responsive */
+@media (max-width:520px){
+  .page{ padding:12px; margin:6px; }
+  .controls input{ width:160px; }
+}

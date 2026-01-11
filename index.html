@@ -1,244 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="hi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bible Verse — Hindi & English</title>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Cinzel:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
-<style>
-  body {
-    margin: 0;
-    font-family: 'Merriweather', serif;
-    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-    color: #2e2e2e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .wrap {
-    max-width: 800px;
-    width: 100%;
-    background: rgba(255,255,255,0.96);
-    border-radius: 18px;
-    box-shadow: 0 16px 40px rgba(99,160,255,0.18), 0 0 0 8px #f9e7c3;
-    padding: 32px 28px;
-    border: 2px solid #ddb892;
-    position: relative;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 22px;
-    position: relative;
-  }
-  .spiritual-svg {
-    display: block;
-    margin: 0 auto 8px auto;
-    width: 54px;
-    height: 54px;
-  }
-  h1 {
-    margin: 0;
-    font-family: 'Cinzel', serif;
-    font-size: 30px;
-    color: #b8860b;
-    text-shadow: 0 2px 6px #f9e7c3;
-  }
-  p.lead {
-    color: #6b6b6b;
-    font-size: 16px;
-    font-style: italic;
-    margin-bottom: 6px;
-  }
-  .divider {
-    height: 2px;
-    width: 80px;
-    margin: 14px auto;
-    border: none;
-    background: linear-gradient(90deg, #f6d365, #fda085);
-    border-radius: 2px;
-  }
-  .form {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-    justify-content: center;
-  }
-  input[type=text] {
-    flex: 1;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1.5px solid #e6d8ad;
-    font-size: 17px;
-    background: #f7f3ed;
-    box-shadow: 0 2px 8px rgba(218,165,32,0.09);
-  }
-  button.submit {
-    background: linear-gradient(180deg, #b8860b 0%, #f6d365 100%);
-    border: none;
-    color: white;
-    padding: 11px 22px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 17px;
-    box-shadow: 0 6px 15px rgba(218,165,32,0.13);
-    transition: background .2s;
-  }
-  button.submit:hover {
-    background: linear-gradient(180deg, #fda085 0%, #f6d365 100%);
-  }
-  .verseArea {
-    margin-top: 22px;
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-  }
-  .col {
-    flex: 1;
-    background: #fffdf7;
-    border: 1.5px solid #f5deb3;
-    border-radius: 12px;
-    padding: 18px 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.07), 0 0 12px #ffe589;
-    opacity: 0;
-    transform: translateY(18px);
-    transition: all .5s cubic-bezier(.33,1.4,.62,1);
-    min-width: 220px;
-  }
-  .col.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .langTitle {
-    font-weight: bold;
-    font-size: 15px;
-    color: #8b6914;
-    margin-bottom: 7px;
-    font-family: 'Cinzel', serif;
-  }
-  .verseText {
-    font-size: 21px;
-    line-height: 1.6;
-    margin-bottom: 10px;
-    font-family: 'Great Vibes', cursive;
-    color: #432c06;
-    text-shadow: 0 1px 6px #f9e7c3;
-    position: relative;
-  }
-  .verseText::before, .verseText::after {
-    content: "“";
-    font-size: 32px;
-    color: #eec97f;
-    position: absolute;
-    left: -18px;
-    top: -14px;
-    font-family: 'Cinzel', serif;
-  }
-  .verseText::after {
-    content: "”";
-    left: unset;
-    right: -18px;
-    top: -14px;
-  }
-  .ref {
-    font-weight: bold;
-    color: #b8860b;
-    text-align: right;
-    font-size: 17px;
-    font-family: 'Cinzel', serif;
-    margin-top: 6px;
-  }
-  @media (max-width: 768px) {
-    .verseArea {
-      flex-direction: column;
-      gap: 10px;
-    }
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bible Verse by Name — Spiritual</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="spiritual.css">
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <svg class="spiritual-svg" viewBox="0 0 54 54" fill="none">
-      <circle cx="27" cy="27" r="25" stroke="#f6d365" stroke-width="3" fill="#fffbe8"/>
-      <path d="M27 12 L27 42" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
-      <path d="M17 27 L37 27" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
-    </svg>
-    <h1>Bible Verse for You</h1>
-    <hr class="divider" />
-    <p class="lead">Enter your name and receive a scripture verse — Hindi & English</p>
-  </header>
+  <main class="page">
+    <header class="site-header">
+      <img src="church-logo.html" alt="logo" class="logo" onerror="this.style.display='none'">
+      <h1>Prarthana aur Vachan</h1>
+      <p class="subtitle">Naam dalein, aur prabhu ka ek anugrah bhara vachan paayein</p>
+    </header>
 
-  <div class="form">
-    <input id="nameInput" type="text" placeholder="Type your name / अपना नाम लिखें">
-    <button class="submit" id="submitBtn">Submit</button>
-  </div>
+    <section class="controls">
+      <input id="nameInput" type="text" placeholder="Naam likhein (jaise: Rahul)" aria-label="Naam">
+      <button id="getVerse">Prapt Karein</button>
+      <button id="toggleAudio" title="Play / Pause ambient">🔈</button>
+    </section>
 
-  <div class="verseArea" id="verseArea" style="display:none;">
-    <div class="col" id="colEN">
-      <div class="langTitle">English</div>
-      <div class="verseText" id="verseEN"></div>
-      <div class="ref" id="refEN"></div>
-    </div>
-    <div class="col" id="colHI">
-      <div class="langTitle">हिन्दी</div>
-      <div class="verseText" id="verseHI"></div>
-      <div class="ref" id="refHI"></div>
-    </div>
-  </div>
-</div>
+    <section id="verseCard" class="verse-card hidden" aria-live="polite">
+      <div id="verseText" class="verse-text"></div>
+      <div id="verseRef" class="verse-ref"></div>
+      <div class="verse-actions">
+        <button id="another">Agla Vachan</button>
+        <button id="share">Share</button>
+      </div>
+    </section>
 
-<script>
-const verses = [
-  {en:"The LORD is my shepherd; I shall not want.", hi:"यहोवा मेरा चरवाहा है; मुझे कुछ भी कमी न होगी।", ref:"Psalm 23:1"},
-  {en:"Be strong and courageous. Do not be afraid.", hi:"धैर्यवान और साहसी बनो; भय न मानो।", ref:"Joshua 1:9"}
-  // ... add more verses here
-];
+    <aside class="prayer">
+      <h2>Ek chhoti prarthana</h2>
+      <p>Prabhu, humein apni daya se dharohar dena aur humare jeevan ko aashirwadit karein. Har naam par ek vachan se humare hriday ko shanti mile.</p>
+      <button id="amen">Amen 🙏</button>
+    </aside>
 
-function djb2(str){
-  let h = 5381;
-  for(let i=0;i<str.length;i++){
-    h = ((h<<5) + h) + str.charCodeAt(i);
-    h = h & 0xffffffff;
-  }
-  return Math.abs(h);
-}
+    <footer class="site-footer">
+      <small>© Aapka seva — Bhagwan ka anugrah sadaa bana rahe</small>
+    </footer>
+  </main>
 
-function pickByName(name){
-  const n = (name||'').trim().toLowerCase();
-  if(!n) return null;
-  const idx = djb2(n) % verses.length;
-  return {index: idx, verse: verses[idx]};
-}
+  <!-- Ambient audio (external) -->
+  <audio id="ambientAudio" loop preload="none">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
-const submitBtn = document.getElementById('submitBtn');
-const nameInput = document.getElementById('nameInput');
-const verseArea = document.getElementById('verseArea');
-const colEN = document.getElementById('colEN');
-const colHI = document.getElementById('colHI');
-const verseEN = document.getElementById('verseEN');
-const verseHI = document.getElementById('verseHI');
-const refEN = document.getElementById('refEN');
-const refHI = document.getElementById('refHI');
-
-function showVerse(){
-  const name = nameInput.value.trim();
-  if(!name) return alert('Please enter your name / कृपया नाम डालें');
-  const obj = pickByName(name);
-  if(!obj) return;
-  const v = obj.verse;
-  verseEN.textContent = v.en;
-  verseHI.textContent = v.hi;
-  refEN.textContent = v.ref;
-  refHI.textContent = v.ref;
-  verseArea.style.display = 'flex';
-  setTimeout(()=>{ colEN.classList.add('show'); colHI.classList.add('show'); }, 20);
-}
-
-submitBtn.addEventListener('click', showVerse);
-nameInput.addEventListener('keypress', e => { if(e.key==='Enter') showVerse(); });
-</script>
+  <!-- Verse picker script -->
+  <script src="verse-picker.js"></script>
 </body>
 </html>
